@@ -3,9 +3,10 @@ import { Event } from '@theia/core/lib/common/event';
 import { DisposableCollection } from '@theia/core/lib/common/disposable';
 import { areEqual, FixedSizeList as List } from 'react-window';
 import dateFormat from 'dateformat';
-import { messagesToLines, truncateLines } from './monitor-utils';
+import { messagesToLines, truncateLines, joinLines } from './monitor-utils';
 import { MonitorManagerProxyClient } from '../../../common/protocol';
 import { MonitorModel } from '../../monitor-model';
+import { ClipboardService } from '@theia/core/lib/browser/clipboard-service';
 
 export type Line = { message: string; timestamp?: Date; lineLen: number };
 
@@ -74,6 +75,12 @@ export class SerialMonitorOutput extends React.Component<
       this.props.clearConsoleEvent(() =>
         this.setState({ lines: [], charCount: 0 })
       ),
+      this.props.copyOutputEvent(() => {
+        const text = joinLines(this.state.lines);
+        // Replace null characters with a visible symbol
+        const safe = text.replace(/\u0000/g, '\u25A1');
+        this.props.clipboardService.writeText(safe);
+      }),
       this.props.monitorModel.onChange(({ property }) => {
         if (property === 'timestamp') {
           const { timestamp } = this.props.monitorModel;
@@ -130,6 +137,8 @@ export namespace SerialMonitorOutput {
     readonly monitorModel: MonitorModel;
     readonly monitorManagerProxy: MonitorManagerProxyClient;
     readonly clearConsoleEvent: Event<void>;
+    readonly copyOutputEvent: Event<void>;
+    readonly clipboardService: ClipboardService;
     readonly height: number;
   }
 

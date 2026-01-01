@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "electron-app",
-  "version": "2.3.7",
+  "version": "2.3.8",
   "license": "AGPL-3.0-or-later",
   "main": "./src-gen/backend/electron-main.js",
   "dependencies": {
@@ -19,7 +19,7 @@
     "@theia/preferences": "1.57.0",
     "@theia/terminal": "1.57.0",
     "@theia/workspace": "1.57.0",
-    "arduino-ide-extension": "2.3.7"
+    "arduino-ide-extension": "2.3.8"
   },
   "devDependencies": {
     "@theia/cli": "1.57.0",
@@ -139,7 +139,8 @@
         "nsis",
         "zip"
       ],
-      "sign": "./scripts/windowsCustomSign.js"
+      "sign": "./scripts/windowsCustomSign.js",
+      "extraFiles": "resources/PATENT_DISCLAIMER"
     },
     "mac": {
       "darkModeSupport": true,
@@ -149,7 +150,8 @@
       "entitlementsInherit": "resources/entitlements.mac.plist",
       "target": {
         "target": "default"
-      }
+      },
+      "extraResources": "resources/PATENT_DISCLAIMER"
     },
     "linux": {
       "target": [
@@ -157,7 +159,8 @@
         "AppImage"
       ],
       "category": "Development",
-      "icon": "resources/icons"
+      "icon": "resources/icons",
+      "extraFiles": "resources/PATENT_DISCLAIMER"
     },
     "msi": {
       "runAfterFinish": false
